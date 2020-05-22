@@ -9,6 +9,12 @@
 
 using namespace std;
 
+template<typename T>
+struct DijkstraOUT{
+    int shortestDistance;
+    map<T,T> predecessorTree;
+};
+
 
 template<typename T>
 struct weightedGraph{
@@ -125,12 +131,17 @@ struct weightedGraph{
         return false;
 
     }
-
+    /*
     int Dijkstra(T s, T f){
 
         //initialize single source
         map<T, int> d;
-        for(auto v : neighborList){ d[v.first] = 10000; }
+        map<T,T> predecessor;
+
+        for(auto v : neighborList){ 
+            d[v.first] = 10000; 
+            predecessor[v.first] = -1;
+        }
         d[s] = 0;
         ///
 
@@ -148,11 +159,48 @@ struct weightedGraph{
             for(auto neighbor : neighborList[u]){
                 if(d[neighbor.first] > d[u] + weightOfEdge(u,neighbor.first)){
                     d[neighbor.first] = d[u] + weightOfEdge(u,neighbor.first);
+                    predecessor[neighbor.first] = u;
                 }
             }
         }
 
         return d[f];
+    }*/
+
+
+    DijkstraOUT<T> Dijkstra(T s, T f){
+
+        //initialize single source
+        map<T, int> d;
+        map<T,T> predecessorTree;
+
+        for(auto v : neighborList){ 
+            d[v.first] = 10000; 
+            predecessorTree[v.first] = -1;
+        }
+        d[s] = 0;
+        ///
+
+        vector<T> S;
+        priority_queue<T> Q;
+        for(auto v : neighborList){ Q.push( -1 * v.first ); }
+
+        while(!Q.empty()){
+            
+            T u = -1 * Q.top();
+            Q.pop();
+
+            S.push_back(u);
+            
+            for(auto neighbor : neighborList[u]){
+                if(d[neighbor.first] > d[u] + weightOfEdge(u,neighbor.first)){
+                    d[neighbor.first] = d[u] + weightOfEdge(u,neighbor.first);
+                    predecessorTree[neighbor.first] = u;
+                }
+            }
+        }
+
+        return {d[f], predecessorTree};
     }
 
 };
