@@ -1,3 +1,8 @@
+/**
+    A weighted graph implementation using an adjacency list.
+    Each vertex is stored in a map as {value : neighbors},
+    where neighbors is a set in the form of [(value : weight) , ... ]
+**/
 #pragma once
 #include<iostream>
 #include<climits>
@@ -66,7 +71,6 @@ struct weightedGraph{
                 for(auto neighbors : vertex.second)
                     cout << "("<< vertex.first << "," << neighbors.first << ") - weight = " << neighbors.second << endl;
                 
-        
     }
 
     int weightOfEdge(T x, T y){
@@ -78,30 +82,9 @@ struct weightedGraph{
 
     }
    
-    int shortestPathLength(T x, T y){
-
-        map<T, int> shortestDistanceToVertex;
-
-        for(auto vertex : neighborList){
-            shortestDistanceToVertex[vertex.first] = INT_MAX;
-        }
-        shortestDistanceToVertex[x] = 0;
-
-        for(auto v : neighborList){
-            for(auto n : v.second){
-                
-                if(shortestDistanceToVertex[n.first] > shortestDistanceToVertex[v.first] + weightOfEdge(v.first,n.first)){
-                    shortestDistanceToVertex[n.first] = shortestDistanceToVertex[v.first] + weightOfEdge(v.first,n.first);
-                }
-            
-            }
-        }
-
-        return shortestDistanceToVertex[y];
-    }
-
     bool BellmanFordNegativeCycle(){
 
+        //Detect if a graph contains a negative cycle using the Bellman-Ford algorithm
         map<T, int> shortestDistanceToVertex;
 
         for(auto vertex : neighborList){
@@ -127,45 +110,8 @@ struct weightedGraph{
             
             }
         }
-
         return false;
-
     }
-    /*
-    int Dijkstra(T s, T f){
-
-        //initialize single source
-        map<T, int> d;
-        map<T,T> predecessor;
-
-        for(auto v : neighborList){ 
-            d[v.first] = 10000; 
-            predecessor[v.first] = -1;
-        }
-        d[s] = 0;
-        ///
-
-        vector<T> S;
-        priority_queue<T> Q;
-        for(auto v : neighborList){ Q.push( -1 * v.first ); }
-
-        while(!Q.empty()){
-            
-            T u = -1 * Q.top();
-            Q.pop();
-
-            S.push_back(u);
-            
-            for(auto neighbor : neighborList[u]){
-                if(d[neighbor.first] > d[u] + weightOfEdge(u,neighbor.first)){
-                    d[neighbor.first] = d[u] + weightOfEdge(u,neighbor.first);
-                    predecessor[neighbor.first] = u;
-                }
-            }
-        }
-
-        return d[f];
-    }*/
 
 
     DijkstraOUT<T> Dijkstra(T s, T f){
@@ -199,7 +145,6 @@ struct weightedGraph{
                 }
             }
         }
-
         return {d[f], predecessorTree};
     }
 
