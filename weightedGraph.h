@@ -2,8 +2,11 @@
     A weighted graph implementation using an adjacency list.
     Each vertex is stored in a map as {value : neighbors},
     where neighbors is a set in the form of [(value : weight) , ... ]
+    05/2020
 **/
 #pragma once
+#define INF INT_MAX
+
 #include<iostream>
 #include<climits>
 #include<vector>
@@ -11,6 +14,7 @@
 #include<cmath>
 #include<map>
 #include<set>
+
 
 using namespace std;
 
@@ -47,8 +51,16 @@ struct weightedGraph{
 
     }
 
+    map<T, set<pair<T,int>>> adjacencyList(){
+        return neighborList;
+    }
+
     void emptyGraph(){
         neighborList = {};
+    }
+
+    bool empty(){
+        return (neighborList.empty());
     }
 
     void printGraph(){
